@@ -1,0 +1,90 @@
+---
+- name: Update system and install dev tools
+  tags: sys_update
+  become: yes
+  yum:
+    name: '*'
+    state: latest
+  yum:
+    name: "@development"
+    state: present
+
+- name: Install required packages
+  tags: install_dev_pkgs
+  yum:
+    name: zlib-devel
+    state: installed
+  yum:
+    name: bzip2-devel
+    state: installed
+  yum:
+    name: openssl-devel
+    state: installed
+  yum:
+    name: ncurses-devel
+    state: installed
+  yum:
+    name: sqlite-devel
+    state: installed
+  yum:
+    name: readline-devel
+    state: installed
+  yum:
+    name: tk-devel
+    state: installed
+  yum:
+    name: gdbm-devel
+    state: installed
+  yum:
+    name: db4-devel
+    state: installed
+  yum:
+    name: libpcap-devel
+    state: installed
+  yum:
+    name: xz-devel
+    state: installed
+  yum:
+    name: expat-devel
+    state: installed
+  yum:
+    name: libffi-devel
+    state: installed
+
+- name: Download Python "{{ python_version }}"
+  tags: install_py
+  become: yes
+  block:
+  - get_url:
+      url: "{{ python_url }}"
+      dest: "{{ home_dir }}"
+  - unarchive:
+      src: "{{ home_dir }}/{{ python_tar }}"
+      dest: "{{ home_dir }}"
+  - file:
+      path: "{{ home_dir }}/{{ python_tar }}"
+      state: absent
+  - shell: ./configure --prefix=/usr/local --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib"
+    args:
+      chdir: "{{ python_dir }}"
+  - shell: make && make altinstall
+    args:
+      chdir: "{{ python_dir }}"
+
+- name: Create Virtual Environment with Python {{ python_version }}
+  tags: create_venv
+  become: no
+  shell: "{{ py_cmd }} -m venv {{ venv }}"
+  args:
+    chdir: "{{ home_dir }}"
+
+- name: Installing Modules "{{ pkgs }}"
+  tags: install_modules
+  become: no
+  block:
+  - debug: msg="{{ pkgs }}"
+  - pip:
+      name: "{{ pkgs }}"
+      virtualenv: "{{ home_dir }}/{{ venv }}"
+  when: pkgs is defined
+

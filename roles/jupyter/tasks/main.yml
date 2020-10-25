@@ -1,0 +1,21 @@
+---
+- name: Download and run installer
+  tags: download_installer
+  block:
+  - get_url: 
+      url: "{{ conda_url }}"
+      dest: "{{ home_dir }}"
+      checksum: sha256:"{{ conda_checksums }}"
+      mode: "0755"
+  - shell: sh "{{ conda_download_installer }}" -b -p "{{ conda_dir }}"
+    args:
+      creates: "{{ conda_dir }}"
+  - file:
+      path: "{{ conda_download_installer }}"
+      state: absent
+
+- name: Install R and Enable with Jupyter
+  tags: install_r
+  block:
+  - shell: bash -c 'source {{ conda_dir }}/bin/activate'
+  - shell: conda install -c r r-irkernel

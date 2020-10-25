@@ -1,0 +1,12 @@
+---
+python_version: 3.7.0
+
+python_tar: "Python-{{ python_version }}.tar.xz"
+
+python_url: "http://python.org/ftp/python/{{ python_version }}/{{ python_tar }}"
+
+python_dir: "{{ home_dir }}/Python-{{ python_version }}"
+
+venv: virtual_py
+
+py_cmd: python3.7

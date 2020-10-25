@@ -1,0 +1,6 @@
+---
+- name: Install Homebrew, Anaconda, R and Jupyter
+  hosts: localhost
+  gather_facts: False
+  roles:
+    - jupyter

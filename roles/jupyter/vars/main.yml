@@ -1,0 +1,12 @@
+---
+conda_filename : Anaconda3-2019.07-Linux-x86_64.sh
+
+conda_checksums: 69581cf739365ec7fb95608eef694ba959d7d33b36eb961953f2b82cb25bdf5a
+
+conda_repo: https://repo.anaconda.com/archive
+
+conda_url: "{{ conda_repo }}/{{ conda_filename }}"
+
+conda_download_installer: "{{ home_dir }}/{{ conda_filename }}"
+
+conda_dir: "{{ home_dir }}/anaconda"

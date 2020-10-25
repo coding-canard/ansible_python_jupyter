@@ -1,0 +1,6 @@
+---
+- name: Download, Compile and Install Python 3.7.0 as altinstall
+  hosts: localhost
+  gather_facts: False
+  roles:
+    - python3
